@@ -10,7 +10,8 @@ class ProdutosFormList extends TPage
     protected $pageNavigation;
     protected $loaded;
     
- 
+    use Adianti\Base\AdiantiFileSaveTrait;
+    
     public function __construct( $param )
     {
         parent::__construct();
@@ -26,46 +27,64 @@ class ProdutosFormList extends TPage
         
         $produtoNome         = new TEntry('produtoNome');
         $produtoNome->forceUpperCase();
+        $produtoNome->addValidation('<b>Produto</b>', new TRequiredValidator);
         
-        $produtoImagem       = new TEntry('produtoImagem');
+        $produtoImagem       = new TFile('produtoImagem');
+        $produtoImagem->enableImageGallery('100','100');
+        $produtoImagem->setAllowedExtensions( ['gif', 'png', 'jpg', 'jpeg'] );
+        $produtoImagem->enableFileHandling();
         
         $produtoTamanho      = new TEntry('produtoTamanho');
         $produtoTamanho->style = $styleId;
+        $produtoTamanho->addValidation('<b>Tamanho/Qtd.</b>', new TRequiredValidator);
         
         $produtoMedida       = new TDBCombo('produtoMedida', 'db_loja', 'Medidas', 'medidaId', 'medidaDescricao');
         $produtoMedida->setDefaultOption(false);
+        $produtoMedida->id = 'produtoMedida';
         
         $produtoCor          = new TDBCombo('produtoCor', 'db_loja', 'Cores', 'corId', 'corDescricao');
         $produtoCor->setDefaultOption(false);
+        $produtoCor->id = 'produtoCor';
         
         $produtoGenero       = new TDBCombo('produtoGenero', 'db_loja', 'Generos', 'generoId', 'generoDescricao');
         $produtoGenero->setDefaultOption(false);
+        $produtoGenero->id = 'produtoGenero';
         
         $produtoMarca        = new TDBCombo('produtoMarca', 'db_loja', 'Marcas', 'marcaId', 'marcaDescricao');
         $produtoMarca->setDefaultOption(false);
+        $produtoMarca->id = 'produtoMarca';
         
         $produtoModelo       = new TDBCombo('produtoModelo', 'db_loja', 'Modelos', 'modeloId', 'modeloDescricao');
         $produtoModelo->setDefaultOption(false);
+        $produtoModelo->id = 'produtoModelo';
         
         $produtoDetalhes     = new TEntry('produtoDetalhes');
         
         $produtoPrecoCusto   = new TEntry('produtoPrecoCusto');
         $produtoPrecoCusto->setNumericMask(2, ',', '.', true);
+        $produtoPrecoCusto->addValidation('<b>Preço de Custo</b>', new TRequiredValidator);
         
         $produtoPrecoVenda   = new TEntry('produtoPrecoVenda');
         $produtoPrecoVenda->setNumericMask(2, ',', '.', true);
+        $produtoPrecoVenda->addValidation('<b>Preço de Venda</b>', new TRequiredValidator);
         
         $produtoQtdAtual     = new TEntry('produtoQtdAtual');
         $produtoQtdAtual->setMask('9!');
         $produtoQtdAtual->style = $styleId;
+        $produtoQtdAtual->addValidation('<b>Qtd. Atual</b>', new TRequiredValidator);
+        $produtoQtdAtual->setValue(0);
         
         $produtoQtdMinima    = new TEntry('produtoQtdMinima');
         $produtoQtdMinima->setMask('9!');
         $produtoQtdMinima->style = $styleId;
+        $produtoQtdMinima->addValidation('<b>Qtd. Min.</b>', new TRequiredValidator);
+        $produtoQtdMinima->setValue(0);
         
         $produtoQtdMaxima    = new TEntry('produtoQtdMaxima');
         $produtoQtdMaxima->setMask('9!');
         $produtoQtdMaxima->style = $styleId;
+        $produtoQtdMaxima->addValidation('<b>Qtd. Max.</b>', new TRequiredValidator);
+        $produtoQtdMaxima->setValue(0);
         
         $tempDataCadastro = new TEntry('tempDataCadastro');
         $tempDataCadastro->setEditable(false);
@@ -118,29 +137,28 @@ class ProdutosFormList extends TPage
         $botaoModelos->style = $btStyle;
         $botaoModelos->addStyleClass('label');
         
-        // add the fields
-        $row = $this->form->addFields( [ new TLabel('ID') , $produtoId ] ,
-                                       [ new TLabel('Produto') , $produtoNome ] );
+        $row = $this->form->addFields( [new TLabel('ID') , $produtoId ] ,
+                                       [ new TLabelIcon('circulo','Produto') , $produtoNome ] );
         $row->layout = ['col-md-2','col-md-10'];                               
         
         //$row = $this->form->addFields( [ new TLabel('Imagem') ], [ $produtoImagem ] );
         
         
         $row = $this->form->addFields( [ $botaoMedidas, $produtoMedida ] ,
-                                       [ new TLabel('Tamanho/Qtd.') , $produtoTamanho ] ,
+                                       [ new TLabelIcon('circulo','Tamanho/Qtd.') , $produtoTamanho ] ,
                                        [ $botaoCores,$produtoCor ],
                                        [ $botaoGeneros, $produtoGenero ] );
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
         $row = $this->form->addFields( [ $botaoMarcas, $produtoMarca ] ,
                                        [ $botaoModelos, $produtoModelo ], 
-                                       [ new TLabel('Preço de Custo') , $produtoPrecoCusto ],
-                                       [ new TLabel('Preço de Venda') , $produtoPrecoVenda ] );
+                                       [ new TLabelIcon('circulo','Preço de Custo') , $produtoPrecoCusto ],
+                                       [ new TLabelIcon('circulo','Preço de Venda') , $produtoPrecoVenda ] );
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
-        $row = $this->form->addFields( [ new TLabel('Qtd. Atual') , $produtoQtdAtual ] ,
-                                       [ new TLabel('Qtd. Mín.') , $produtoQtdMinima ] ,
-                                       [ new TLabel('Qtd. Max.') , $produtoQtdMaxima ],
+        $row = $this->form->addFields( [ new TLabelIcon('circulo','Qtd. Atual') , $produtoQtdAtual ] ,
+                                       [ new TLabelIcon('circulo','Qtd. Mín.') , $produtoQtdMinima ] ,
+                                       [ new TLabelIcon('circulo','Qtd. Max.') , $produtoQtdMaxima ],
                                        [ new TLabel('Data Cadastro') , $tempDataCadastro ]);
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
@@ -246,24 +264,29 @@ class ProdutosFormList extends TPage
     {
         $dados = TSession::getValue('form_produtos');
         TSession::delValue('form_produtos');
-        
+             
         $formName = $this->form->getName();
         
         TDBCombo::reloadFromModel($formName, $dados->comboNome, 
         'db_loja', $dados->comboModel, $dados->comboChave, 
         $dados->comboMostrar, $dados->comboMostrar);
         
+        $this->form->setData($dados);
+        
         if($param['key'])
         {
-            $dados->{$dados->comboNome} = $param['key'];
+            $key = $param['key'];
+            $dados->{$dados->comboNome} = $key;
+            $script  = "$('#{$dados->comboNome}').find('option[value=\"{$key}\"]').attr('selected',true);";
+            TScript::create($script);
         }
-      
-        TForm::sendData($formName,$dados);
+               
     }
     
     public function mostrarJanelaLateral($param)
     {
         $dados  = $this->form->getData();
+             
         $dados->janela       = $param['janela'];
         $dados->comboNome    = $param['comboNome'];
         $dados->comboChave   = $param['comboChave'];
@@ -395,9 +418,11 @@ class ProdutosFormList extends TPage
             
             $object = new Produtos;  // create an empty object
             $object->fromArray( (array) $data); // load the object with data
-            
-            //$object->produtoDataCadastro = null;
+           
             $object->store(); // save the object
+            
+            // copia o arquivo para a pasta de destino, e atualiza o objeto
+            $this->saveFile($object, $data, 'produtoImagem', 'files/imgProdutos');
             
             // get the generated produtoId
             $data->produtoId = $object->produtoId;
