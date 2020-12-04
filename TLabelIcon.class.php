@@ -5,25 +5,25 @@
  */
 class TLabelIcon extends TLabel
 {
-    
-    public function __construct($icon,$text,$color = null)
+    public function __construct($text,$textColor = null,$color = null,$icon = null)
     {
       
-      !$color?$color = 'red':'';      
+      $color = isset($color) ? $color : 'red'; 
+      $icon = isset($icon) ? $icon : 'triangle';  
       
-      $arr_aviso = array('triangulo' => "<i class='fa fa-exclamation-triangle {$color}'></i>",
-                         'exclamacao'=> "<i class='fa fa-exclamation {$color}'></i>",
-                         'circulo'   => "<i class='fa fa-exclamation-circle {$color}'></i>");
-                         
-      $tx_label = $arr_aviso[$icon] . ' '. $text;          
-                         
-      parent::__construct($tx_label);
+      $arr_icon = array('triangle' => "<i class = 'fa fa-exclamation-triangle {$color}'></i>",
+                         'exclamation' => "<i class = 'fa fa-exclamation {$color}'></i>",
+                         'circle' => "<i class = 'fa fa-exclamation-circle {$color}'></i>" );   
+      
+      
+      $text_label = $arr_icon[$icon] . ' ' . $text;
+      parent::__construct($text_label, $textColor);          
     }
     
     
     public function show()
     {
-     parent::setTip('Preenchimento Obrigatório');
+     parent::setTip(_t('Mandatory filling'));
      parent::show();     
     }
 }
