@@ -138,27 +138,27 @@ class ProdutosFormList extends TPage
         $botaoModelos->addStyleClass('label');
         
         $row = $this->form->addFields( [new TLabel('ID') , $produtoId ] ,
-                                       [ new TLabelIcon('circulo','Produto') , $produtoNome ] );
+                                       [ new TLabelIcon('Produto','black','red','circle') , $produtoNome ] );
         $row->layout = ['col-md-2','col-md-10'];                               
         
         //$row = $this->form->addFields( [ new TLabel('Imagem') ], [ $produtoImagem ] );
         
         
         $row = $this->form->addFields( [ $botaoMedidas, $produtoMedida ] ,
-                                       [ new TLabelIcon('circulo','Tamanho/Qtd.') , $produtoTamanho ] ,
+                                       [ new TLabelIcon('Tamanho/Qtd.','black','red','circle'), $produtoTamanho ] ,
                                        [ $botaoCores,$produtoCor ],
                                        [ $botaoGeneros, $produtoGenero ] );
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
         $row = $this->form->addFields( [ $botaoMarcas, $produtoMarca ] ,
                                        [ $botaoModelos, $produtoModelo ], 
-                                       [ new TLabelIcon('circulo','Preço de Custo') , $produtoPrecoCusto ],
-                                       [ new TLabelIcon('circulo','Preço de Venda') , $produtoPrecoVenda ] );
+                                       [ new TLabelIcon('Preço de Custo','black','red','circle') , $produtoPrecoCusto ],
+                                       [ new TLabelIcon('Preço de Venda','black','red','circle') , $produtoPrecoVenda ] );
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
-        $row = $this->form->addFields( [ new TLabelIcon('circulo','Qtd. Atual') , $produtoQtdAtual ] ,
-                                       [ new TLabelIcon('circulo','Qtd. Mín.') , $produtoQtdMinima ] ,
-                                       [ new TLabelIcon('circulo','Qtd. Max.') , $produtoQtdMaxima ],
+        $row = $this->form->addFields( [ new TLabelIcon('Qtd. Atual','black','red','circle') , $produtoQtdAtual ] ,
+                                       [ new TLabelIcon('Qtd. Mín.','black','red','circle') , $produtoQtdMinima ] ,
+                                       [ new TLabelIcon('Qtd. Max.','black','red','circle') , $produtoQtdMaxima ],
                                        [ new TLabel('Data Cadastro') , $tempDataCadastro ]);
         $row->layout = ['col-md-3','col-md-3','col-md-3','col-md-3'];
                                        
